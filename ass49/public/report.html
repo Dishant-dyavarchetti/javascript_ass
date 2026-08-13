@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Report Card of the Student</title>
+    </head>
+    <body>
+        <h1>Student Report Card</h1>
+        <h3 name="stud_name"></h3>
+
+        <table border="1">
+            <tr>
+                <th>Subject</th>
+                <th>Marks</th>
+            </tr>
+            <tr>
+                <td>Maths</td>
+                <td id="maths_mks"></td>
+            </tr>
+            <tr>
+                <td>Science</td>
+                <td id="sci_mks"></td>
+
+            </tr>
+            <tr>
+                <td>Englist</td>
+                <td id="eng_mks"></td>
+            </tr>
+        </table>
+
+        <h3 id="total"></h3>
+        <h3 id="perc"></h3>
+        <h3 id="grade"></h3>
+
+        <script>
+            let params = new URLSearchParams(window.location.search);
+            document.getElementsByName("stud_name").innerHTML = "Name" + params.get("stud_name")[0];
+
+            document.getElementById("maths_mks").innerHTML = params.get("maths_mks");
+
+            document.getElementById("sci_mks").innerHTML = params.get("sci_mks");
+
+            document.getElementById("eng_mks").innerHTML = params.get("eng_mks");
+            
+            document.getElementById("total").innerHTML =
+            "Total: " + params.get("total") + " / 300";
+
+            document.getElementById("perc").innerHTML =
+                "Percentage: " +
+                Number(params.get("perc")).toFixed(2) + "%";
+
+            document.getElementById("grade").innerHTML =
+                "Grade: " + params.get("grade");
+        </script>
+    </body>
+</html>

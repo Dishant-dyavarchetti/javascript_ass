@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <title>Online Examination System</title>
+    </head>
+    <body>
+        <h1>Online Examination</h1>
+
+        <form id="examForm">
+            <div id="questions"></div>
+            <button type="button" onclick="checkAnswers()">Submit</button>
+        </form>
+
+        <h2 id="result"></h2>
+
+        <script>
+            function checkAnswers(){
+                let score = 0;
+                questions.forEach((question,index) => {
+                    const selected = document.querySelector(
+                        `input[name="q${index}"]:checked`
+                    );
+                    if(selected && selected.value == question.answer){
+                        score++;
+                    }
+                });
+                document.getElementById("result").innerHTML = "Your Score: " + score + "/" + questions.length;
+            }
+        </script>
+    </body>
+</html>
