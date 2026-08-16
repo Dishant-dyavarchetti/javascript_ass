@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Read CSV File</title>
+</head>
+
+<body>
+
+    <h1>Read CSV File Using FileReader API</h1>
+
+    <label>Select CSV File:</label>
+    <input type="file" id="fileInput" accept=".csv">
+
+    <br><br>
+
+    <button onclick="readFile()">Read CSV File</button>
+
+    <br><br>
+
+    <table border="1" id="table">
+
+    </table>
+
+
+    <script>
+
+        function readFile() {
+
+            // Get selected file
+            let file = document.getElementById("fileInput").files[0];
+
+
+            // Check if file is selected
+            if (!file) {
+                alert("Please select a CSV file first.");
+                return;
+            }
+
+
+            // Create FileReader object
+            let reader = new FileReader();
+
+
+            // Read CSV file as text
+            reader.readAsText(file);
+
+
+            // Execute after file is read
+            reader.onload = function() {
+
+                // Get the file contents
+                let data = reader.result;
+
+
+                // Split data into rows
+                let rows = data.split("\n");
+
+
+                // Clear previous table
+                document.getElementById("table").innerHTML = "";
+
+
+                // Loop through each row
+                rows.forEach((row) => {
+
+                    // Split row into columns
+                    let columns = row.split(",");
+
+
+                    // Create table row
+                    let tr = document.createElement("tr");
+
+
+                    // Loop through columns
+                    columns.forEach((column) => {
+
+                        // Create table data
+                        let td = document.createElement("td");
+
+                        td.innerHTML = column.trim();
+
+                        tr.appendChild(td);
+
+                    });
+
+
+                    // Add row to table
+                    document.getElementById("table").appendChild(tr);
+
+                });
+
+            };
+
+
+            // Handle error
+            reader.onerror = function() {
+                alert("Error while reading the file.");
+            };
+
+        }
+
+    </script>
+
+</body>
+</html>

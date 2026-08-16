@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Simple Movie Booking </title>
+        <style>
+            body{
+                font-family: sans-serif;
+                margin: 20px;
+            }
+            .row{
+                display: flex;
+                gap: 8px;
+                margin-bottom: 8px;
+                align-items: center;
+            }
+            .seat{
+                width: 35px;
+                height: 35px;
+                background: #ddd;
+                border-radius: 4px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+
+            }
+            .seat.selected { background: #22c55e; color: white; }
+            .seat.occupied { background: #64748b; color: white; cursor: not-allowed; }
+            .modal { display: none; border: 2px solid #333; padding: 20px; margin-top: 20px; width: 300px; background: #fff; }
+            .modal.show { display: block; }
+        </style>
+    </head>
+    <body>
+        <h2>Movie Ticket Booking</h2>
+        <div>
+            <label>Movie: </label>
+            <select id="movie-select">
+                <option value="10">Movie A (10$)</option>
+                <option value="20">Movie B (20$)</option>
+            </select>
+
+            <label>Name: </label>
+            <input type="text" id="customer-name" placeholder="Your Name">
+        </div>
+        <br>
+
+        <div id="grid-container"></div>
+        <br>
+
+        <div>
+            <p>Selected Seats: <span id="seat-display">None</span></p>
+            <p>Total: $<span id="total-display">0</span>></p>
+            <button id="book-btn">Book Tickets</button>
+        </div>
+
+        <div id="bill-modal" class="modal">
+            <h3>--- RECEIPTS ---</h3>
+            <p>Customer: <span id="bill-name"></span></p>
+            <p>Movie: <span id="bill-movie"></span></p>
+            <P>Seats: <span id="bill-seats"></span></P>
+            <p>Total Paid: $<span id="bill-total"></span></p>
+            <button id="confirm-btn">Confirm and finish</button>
+        </div>
+
+        <script>
+            const rows = ['A','B','C','D'];
+            const seatsPerRow = 5;
+
+            const occupiedSeats = new Set(['A1', 'B4']);
+            const selectedSeats = new Set();
+
+            const gridContainer = document.getElementById('grid-container');
+            const movieSelect = document.getElementById('movie-select');
+            const customerNameInput = document.getElementById('customer-name');
+            const seatsDisplay = document.getElementById('seat-display');
+            const totalDisplay = document.getElementById('total-display');
+            const bookbtn = document.getElementById('book-btn');
+            const billModal = document.getElementById('bill-modal');
+            const confirmBtn = document.getElementById('confirm-btn');
+
+            function createGrid(){
+                gridContainer.innerHTML = '';
+                rows.forEach(rowLabel => {
+                    const rowDiv = document.createElement('div');
+                    rowDiv.className = 'row';
+
+                    for(let i=1;i<=seatsPerRow;i++){
+                        const seatId = `${rowLabel}${i}`;
+                        const seatDiv = document.createElement('div');
+                        seatDiv.className = 'seat';
+                        seatDiv.textContent = seatId;
+
+                        if(occupiedSeats.has(seatId)){
+                            seatDiv.classList.add('occupied');
+                        }else{
+                            seatDiv.addEventListener('click', () => toggleSeat(seatId, seatDiv));
+                        }
+                        rowDiv.appendChild(seatDiv);
+                    }
+                    gridContainer.appendChild(rowDiv);
+                });
+            }
+
+                function toggleSeat(seatId, seatEle){
+                    if(selectedSeats.has(seatId)){
+                        selectedSeats.delete(seatId);
+                        seatEle.classList.remove('selected');
+                    }else{
+                        selectedSeats.add(seatId);
+                        seatEle.classList.add('selected');
+                    }
+                    updateSummary();
+                }
+
+                function updateSummary(){
+                    const ticketPrice = Number(movieSelect.value);
+                    const count = selectedSeats.size;
+                    const seatList = Array.from(selectedSeats).sort().join(', ');
+
+                    seatsDisplay.textContent = seatList || 'None';
+                    totalDisplay.textContent = count * ticketPrice;
+                }
+
+                    bookbtn.addEventListener('click', () => {
+                        const name = customerNameInput.value.trim();
+                        if(!name){
+                            alert("Please Enter the name");
+                            return;
+                        }
+                        if(selectedSeats.size === 0){
+                            alert('please select atleast one seat');
+                            return;
+                        }
+                        document.getElementById('bill-name').textContent = name;
+                        document.getElementById('bill-movie').textContent = movieSelect.options[movieSelect.selectedIndex].text;
+                        document.getElementById('bill-seats').textContent = Array.from(selectedSeats).join(', ');
+                        document.getElementById('bill-total').textContent = totalDisplay.textContent;
+
+                        billModal.classList.add('show');
+
+                    });
+
+                    confirmBtn.addEventListener('click', () => {
+                        selectedSeats.forEach(seatId => occupiedSeats.add(seatId));
+                        selectedSeats.clear();
+
+                        billModal.classList.remove('show');
+                        customerNameInput.value = '';
+                        createGrid();
+                        updateSummary();
+
+                        alert("Booking Completed");
+                    });
+
+                    movieSelect.addEventListener('change', updateSummary);
+                    createGrid();
+            
+        </script>
+    </body>
+</html>

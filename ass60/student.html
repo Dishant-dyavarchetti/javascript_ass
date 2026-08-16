@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Student List</title>
+    </head>
+    <body>
+        <h1>Student Details</h1>
+        <div id="details">
+
+        </div>
+
+        <button><a href="/">GO To add Student</a></button>
+        <button><a href="/delete">Delete A student</a></button>
+        <button><a href="/update">Update a student</a></button>
+
+        <script>
+            fetch("http://localhost:3001/students")
+                .then((response) => {
+                    return response.json();
+                })
+                .then((data) => {
+                    let count = 1;
+                    data.forEach(stud => {
+                        
+                        document.getElementById('details').innerHTML += `
+                            <h2>Student No: ${count}</h2>
+                            <p>Roll No: ${stud.rollNo}</p>
+                            <p>Name: ${stud.name}</p>
+                            <p>Sem: ${stud.sem}</p>
+                            <p>CGPA: ${stud.cgpa}</p>
+                            <br>     
+                        `;
+                        count++;
+                    });
+                })
+        </script>
+    </body>
+</html>

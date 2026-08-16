@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Update Student</title>
+    </head>
+    <body>
+        <Label>Enter the Updated Roll No: </Label>
+        <input type="text" name="update_roll" id="roll">
+        <br>
+
+        <label>Enter the Updated Name: </label>
+        <input type="text" name="update_name">
+        <br>
+
+        <label>Enter the Updated Semester: </label>
+        <input type="text" name="update_sem">
+        <br>
+
+        <label>Enter the Updated CGPA: </label>
+        <input type="text" name="update_cgpa">
+
+        <button onclick="updateStudent()">Update Student</button>
+
+        <div id="result"></div>
+
+        <script>
+            function updateStudent(){
+                let roll = Number(document.getElementById('roll').value);
+                let student = {
+                    name: document.getElementsByName('update_name')[0].value,
+                    sem: Number(document.getElementsByName('update_sem')[0].value),
+                    cgpa: Number(document.getElementsByName('update_cgpa')[0].value)
+                }
+
+                fetch("/update/" + roll,{
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(student)
+                })
+                .then((response) => {
+                    return response.text();
+                })
+                .then((data) => {
+                    document.getElementById('result').innerHTML = data;
+                })
+                .catch((error) => {
+                    console.log("Error: " + error);
+                });
+            }
+        </script>
+    </body>
+</html>

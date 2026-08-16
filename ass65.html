@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Image Preview Using FileReader</title>
+</head>
+
+<body>
+
+    <h1>Image Preview Before Uploading</h1>
+
+    <label>Select an Image:</label>
+
+    <input type="file" id="imageInput" accept="image/*">
+
+    <br><br>
+
+    <button onclick="previewImage()">Preview Image</button>
+
+    <br><br>
+
+    <h3>Image Preview:</h3>
+
+    <img id="preview" width="300">
+
+    <script>
+
+        function previewImage() {
+
+            // Get selected image
+            let file = document.getElementById("imageInput").files[0];
+
+            // Check if file is selected
+            if (!file) {
+                alert("Please select an image first.");
+                return;
+            }
+
+            // Create FileReader object
+            let reader = new FileReader();
+
+            // Read image as Data URL
+            reader.readAsDataURL(file);
+
+            // Execute after image is successfully read
+            reader.onload = function() {
+
+                document.getElementById("preview").src =
+                    reader.result;
+
+            };
+
+            // Handle error
+            reader.onerror = function() {
+
+                alert("Error while reading the image.");
+
+            };
+        }
+
+    </script>
+
+</body>
+</html>

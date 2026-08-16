@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>File Reader Program</title>
+</head>
+
+<body>
+
+    <h1>Read Text File Using FileReader API</h1>
+
+    <label>Select a Text File:</label>
+    <input type="file" id="fileInput" accept=".txt">
+
+    <br><br>
+
+    <button onclick="readFile()">Read File</button>
+
+    <h2>File Contents:</h2>
+
+    <pre id="output"></pre>
+
+
+    <script>
+
+        function readFile() {
+
+            // Get the selected file
+            let file = document.getElementById("fileInput").files[0];
+
+
+            // Check if file is selected
+            if (!file) {
+                document.getElementById("output").innerHTML =
+                    "Please select a file first.";
+
+                return;
+            }
+
+
+            // Create FileReader object
+            let reader = new FileReader();
+
+
+            // Read the selected file as text
+            reader.readAsText(file);
+
+
+            // Execute after the file is successfully read
+            reader.onload = function() {
+
+                document.getElementById("output").innerHTML =
+                    reader.result;
+
+            };
+
+
+            // Handle error while reading the file
+            reader.onerror = function() {
+
+                document.getElementById("output").innerHTML =
+                    "Error while reading the file.";
+
+            };
+
+        }
+
+    </script>
+
+</body>
+</html>

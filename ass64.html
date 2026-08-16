@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Read JSON File</title>
+</head>
+
+<body>
+
+    <h1>Read JSON File Using FileReader API</h1>
+
+    <label>Select JSON File:</label>
+    <input type="file" id="fileInput" accept=".json">
+
+    <br><br>
+
+    <button onclick="readFile()">Read JSON File</button>
+
+    <br><br>
+
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Roll No</th>
+                <th>Name</th>
+                <th>Semester</th>
+                <th>CGPA</th>
+            </tr>
+        </thead>
+
+        <tbody id="tableData">
+
+        </tbody>
+    </table>
+
+
+    <script>
+
+        function readFile() {
+
+            // Get the selected file
+            let file = document.getElementById("fileInput").files[0];
+
+
+            // Check if a file is selected
+            if (!file) {
+                alert("Please select a JSON file first.");
+                return;
+            }
+
+
+            // Create FileReader object
+            let reader = new FileReader();
+
+
+            // Read the file as text
+            reader.readAsText(file);
+
+
+            // Execute after the file is read
+            reader.onload = function() {
+
+                try {
+
+                    // Convert JSON text into JavaScript data
+                    let students = JSON.parse(reader.result);
+
+
+                    // Clear previous table data
+                    document.getElementById("tableData").innerHTML = "";
+
+
+                    // Display each record
+                    students.forEach((student) => {
+
+                        document.getElementById("tableData").innerHTML += `
+                            <tr>
+                                <td>${student.rollNo}</td>
+                                <td>${student.name}</td>
+                                <td>${student.sem}</td>
+                                <td>${student.cgpa}</td>
+                            </tr>
+                        `;
+
+                    });
+
+                }
+                catch (error) {
+
+                    alert("Invalid JSON file.");
+
+                }
+
+            };
+
+
+            // Error while reading file
+            reader.onerror = function() {
+
+                alert("Error reading the file.");
+
+            };
+
+        }
+
+    </script>
+
+</body>
+</html>

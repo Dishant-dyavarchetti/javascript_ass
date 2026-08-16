@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fetch API Error Handling</title>
+</head>
+<body>
+
+    <h1>Product Details</h1>
+
+    <button onclick="getProduct()">Get Product</button>
+
+    <div id="result"></div>
+
+    <script>
+        function getProduct() {
+
+            fetch("http://localhost:3001/product")
+
+                .then((response) => {
+
+                    if (!response.ok) {
+                        throw new Error("Failed to fetch data");
+                    }
+
+                    return response.json();
+                })
+
+                .then((data) => {
+
+                    document.getElementById("result").innerHTML = `
+                        <h3>Data fetched successfully!</h3>
+                        <p>ID: ${data.id}</p>
+                        <p>Name: ${data.name}</p>
+                        <p>Price: ${data.price}</p>
+                    `;
+                })
+
+                .catch((error) => {
+
+                    document.getElementById("result").innerHTML =
+                        `<h3>Error: ${error.message}</h3>`;
+                });
+        }
+    </script>
+
+</body>
+</html>

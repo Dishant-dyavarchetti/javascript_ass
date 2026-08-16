@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Delete Student</title>
+    </head>
+    <body>
+        <h1>Delete a Student</h1>
+            <label>Enter the Roll Number You want to Delete from the record: </label>
+            <input type="text" id="roll">
+
+            <button onclick="deleteStudent()">Delete Student</button>
+
+        <h3 id="result"></h3>
+
+        <button><a href="/">GO To add Student</a></button>
+        <button><a href="/view">View Students</a></button>
+        <button><a href="/update">Update a student</a></button>
+
+        <script>
+            function deleteStudent(){
+                let roll = Number(document.getElementById('roll').value);
+
+                fetch("/delete/" + roll,
+                    { method: "DELETE" }
+                ).then((response) => {
+                    return response.text();
+                }).then((data) => {
+                    document.getElementById('result').innerHTML = data;
+                }).catch((error) => {
+                    console.log(error);
+                });
+            }
+        </script>
+    </body>
+</html>
